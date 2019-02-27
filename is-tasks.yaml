@@ -1,0 +1,19 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewBuild
+  creationTimestamp: 2019-02-26T15:05:42Z
+  generation: 1
+  labels:
+    build: tasks
+  name: tasks
+  namespace: xyz-tasks-dev
+  resourceVersion: "915840"
+  selfLink: /apis/image.openshift.io/v1/namespaces/xyz-tasks-dev/imagestreams/tasks
+  uid: fc70c3c8-39d7-11e9-81ab-06c0800b65f8
+spec:
+  lookupPolicy:
+    local: false
+status:
+  dockerImageRepository: docker-registry.default.svc:5000/xyz-tasks-dev/tasks

@@ -1,0 +1,38 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewBuild
+    openshift.io/image.dockerRepositoryCheck: 2019-02-26T15:05:43Z
+  creationTimestamp: 2019-02-26T15:05:42Z
+  generation: 2
+  labels:
+    build: tasks
+  name: wildfly
+  namespace: xyz-tasks-dev
+  resourceVersion: "915843"
+  selfLink: /apis/image.openshift.io/v1/namespaces/xyz-tasks-dev/imagestreams/wildfly
+  uid: fc6fbe1d-39d7-11e9-81ab-06c0800b65f8
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+  - annotations:
+      openshift.io/imported-from: jboss/wildfly:latest
+    from:
+      kind: DockerImage
+      name: jboss/wildfly:latest
+    generation: 2
+    importPolicy: {}
+    name: latest
+    referencePolicy:
+      type: Source
+status:
+  dockerImageRepository: docker-registry.default.svc:5000/xyz-tasks-dev/wildfly
+  tags:
+  - items:
+    - created: 2019-02-26T15:05:43Z
+      dockerImageReference: jboss/wildfly@sha256:a568ebd8abea6a07bd5499af843097eae871af25e1a83a7ff69d9f22002ff2cc
+      generation: 2
+      image: sha256:a568ebd8abea6a07bd5499af843097eae871af25e1a83a7ff69d9f22002ff2cc
+    tag: latest

@@ -1,0 +1,37 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  labels:
+    build: tasks
+  name: tasks
+  namespace: xyz-tasks-dev
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: tasks:latest
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    binary: {}
+    dockerfile: |-
+      FROM jboss/wildfly
+      ADD tasks-*.war /opt/jboss/wildfly/standalone/deployments/
+    type: Binary
+  strategy:
+    dockerStrategy:
+      from:
+        kind: ImageStreamTag
+        name: wildfly:latest
+    type: Docker
+  successfulBuildsHistoryLimit: 5
+  triggers:
+  - github:
+      secret: j-e5XFSI6cpp8b3uIziI
+    type: GitHub
+  - generic:
+      secret: Q2aswlBmY0pM8R02jr1f
+    type: Generic

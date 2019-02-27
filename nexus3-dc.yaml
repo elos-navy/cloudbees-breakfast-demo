@@ -1,0 +1,91 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: nexus3
+  name: nexus3
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    app: nexus3
+    deploymentconfig: nexus3
+  strategy:
+    activeDeadlineSeconds: 21600
+    recreateParams:
+      timeoutSeconds: 600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nexus3
+        deploymentconfig: nexus3
+    spec:
+      containers:
+      - image: sonatype/nexus3
+        imagePullPolicy: Always
+        livenessProbe:
+          exec:
+            command:
+            - echo
+            - ok
+          failureThreshold: 3
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: nexus3
+        ports:
+        - containerPort: 8081
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /repository/maven-public/
+            port: 8081
+            scheme: HTTP
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: "1"
+            memory: 4Gi
+          requests:
+            cpu: 500m
+            memory: 500Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /nexus-data
+          name: nexus3-volume-1
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: nexus3-volume-1
+        persistentVolumeClaim:
+          claimName: nexus-pvc
+  test: false
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - nexus3
+      from:
+        kind: ImageStreamTag
+        name: nexus3:latest
+        namespace: lsm-nexus
+    type: ImageChange
